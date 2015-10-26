@@ -29,4 +29,5 @@ void ShortcutReader::readEntry()
 {
     this->setText("");
     this->setEnabled(true);
+    this->setFocus();
 }
