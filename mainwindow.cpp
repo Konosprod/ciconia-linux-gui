@@ -17,10 +17,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_screenmanager = new ScreenshotManager(this);
 
-    m_shortcuts[0] = new QxtGlobalShortcut(QKeySequence(ui->lineEdit_2->text()), this);
+    m_shortcuts[0] = new GlobalShortcut(QKeySequence(ui->lineEdit_2->text()), this);
 
 
     connect(m_shortcuts[0], SIGNAL(activated()), m_screenmanager, SLOT(takeFullscreen()));
+
+    connect(ui->lineEdit_2, SIGNAL(textChanged(QString)), m_shortcuts[0], SLOT(updateShortcut(QString)));
 }
 
 MainWindow::~MainWindow()

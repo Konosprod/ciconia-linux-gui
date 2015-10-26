@@ -8,6 +8,7 @@
 #include <QKeySequence>
 #include "shortcutreader.h"
 #include "screenshotmanager.h"
+#include "globalshortcut.h"
 
 namespace Ui {
     class MainWindow;
@@ -22,7 +23,7 @@ public:
     ~MainWindow();
 
 protected:
-    QxtGlobalShortcut* m_shortcuts[5];
+    GlobalShortcut* m_shortcuts[5];
     ScreenshotManager* m_screenmanager;
 
 private:

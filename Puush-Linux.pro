@@ -18,10 +18,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     shortcutreader.cpp \
-    screenshotmanager.cpp
+    screenshotmanager.cpp \
+    globalshortcut.cpp
 
 HEADERS  += mainwindow.h \
     shortcutreader.h \
-    screenshotmanager.h
+    screenshotmanager.h \
+    globalshortcut.h
 
 FORMS    += mainwindow.ui
