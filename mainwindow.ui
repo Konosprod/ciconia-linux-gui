@@ -131,6 +131,9 @@
            </item>
            <item row="0" column="1">
             <widget class="ShortcutReader" name="lineEdit_2">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Ctrl+Shift+1</string>
              </property>
@@ -152,6 +155,9 @@
            </item>
            <item row="1" column="1">
             <widget class="ShortcutReader" name="lineEdit_3">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Ctrl+Shift+2</string>
              </property>
@@ -173,6 +179,9 @@
            </item>
            <item row="2" column="1">
             <widget class="ShortcutReader" name="lineEdit_4">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Ctrl+Shift+3</string>
              </property>
@@ -194,6 +203,9 @@
            </item>
            <item row="3" column="1">
             <widget class="ShortcutReader" name="lineEdit_5">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Ctrl+Shift+4</string>
              </property>
@@ -215,6 +227,9 @@
            </item>
            <item row="4" column="1">
             <widget class="ShortcutReader" name="lineEdit_6">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Ctrl+Shift+5</string>
              </property>
@@ -242,7 +257,7 @@
      <x>0</x>
      <y>0</y>
      <width>508</width>
-     <height>19</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
