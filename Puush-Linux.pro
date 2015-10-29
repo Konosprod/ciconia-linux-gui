@@ -27,3 +27,6 @@ HEADERS  += mainwindow.h \
     globalshortcut.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    rc.qrc

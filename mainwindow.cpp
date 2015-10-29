@@ -9,23 +9,74 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setWindowTitle("Ciconia");
 
-    connect(ui->pushButton, SIGNAL(clicked()), ui->lineEdit_2, SLOT(readEntry()));
-    connect(ui->pushButton_2, SIGNAL(clicked()), ui->lineEdit_3, SLOT(readEntry()));
-    connect(ui->pushButton_3, SIGNAL(clicked()), ui->lineEdit_4, SLOT(readEntry()));
-    connect(ui->pushButton_4, SIGNAL(clicked()), ui->lineEdit_5, SLOT(readEntry()));
-    connect(ui->pushButton_5, SIGNAL(clicked()), ui->lineEdit_6, SLOT(readEntry()));
-
     m_screenmanager = new ScreenshotManager(this);
+    m_systray = new QSystemTrayIcon(this);
 
-    m_shortcuts[0] = new GlobalShortcut(QKeySequence(ui->lineEdit_2->text()), this);
+    m_systray->show();
 
+    loadSettings();
 
-    connect(m_shortcuts[0], SIGNAL(activated()), m_screenmanager, SLOT(takeFullscreen()));
+    m_shortcuts[0] = new GlobalShortcut(QKeySequence(ui->shortcutFullscreen->text()), this);
+    m_shortcuts[1] = new GlobalShortcut(QKeySequence(ui->shortcutArea->text()), this);
+    m_shortcuts[2] = new GlobalShortcut(QKeySequence(ui->shortcutCurrentWindow->text()), this);
 
-    connect(ui->lineEdit_2, SIGNAL(textChanged(QString)), m_shortcuts[0], SLOT(updateShortcut(QString)));
+    doConnexions();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::doConnexions()
+{
+    connect(ui->fullscreenButton, SIGNAL(clicked()), ui->shortcutFullscreen, SLOT(readEntry()));
+    connect(ui->areaButton, SIGNAL(clicked()), ui->shortcutArea, SLOT(readEntry()));
+    connect(ui->currentWindowButton, SIGNAL(clicked()), ui->shortcutCurrentWindow, SLOT(readEntry()));
+    connect(ui->uploadFileButton, SIGNAL(clicked()), ui->shortcutUploadFile, SLOT(readEntry()));
+
+    connect(m_shortcuts[0], SIGNAL(activated()), m_screenmanager, SLOT(takeFullscreen()));
+    connect(m_shortcuts[1], SIGNAL(activated()), m_screenmanager, SLOT(takeArea()));
+    connect(m_shortcuts[2], SIGNAL(activated()), m_screenmanager, SLOT(takeWindow()));
+
+    connect(ui->shortcutFullscreen, SIGNAL(textChanged(QString)), m_shortcuts[0], SLOT(updateShortcut(QString)));
+    connect(ui->shortcutArea, SIGNAL(textChanged(QString)), m_shortcuts[1], SLOT(updateShortcut(QString)));
+    connect(ui->shortcutCurrentWindow, SIGNAL(textChanged(QString)), m_shortcuts[2], SLOT(updateShortcut(QString)));
+
+    connect(ui->buttonQuit, SIGNAL(clicked()), qApp, SLOT(quit()));
+
+    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(saveSettings()));
+}
+
+void MainWindow::saveSettings()
+{
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Konosprod", "Ciconia");
+
+    settings.beginGroup("shortcuts");
+    settings.setValue("fullscreen", ui->shortcutFullscreen->text());
+    settings.setValue("area", ui->shortcutArea->text());
+    settings.setValue("window", ui->shortcutCurrentWindow->text());
+    settings.setValue("upload", ui->shortcutUploadFile->text());
+    settings.endGroup();
+
+    settings.beginGroup("global");
+    settings.setValue("playsound", ui->playNotifcationSound->isChecked());
+    settings.setValue("clipboard", ui->copyToClipboard->isChecked());
+    settings.endGroup();
+}
+
+void MainWindow::loadSettings()
+{
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Konosprod", "Ciconia");
+
+    settings.beginGroup("shortcuts");
+    ui->shortcutFullscreen->setText(settings.value("fullscreen", "Ctrl+Shift+1").toString());
+    ui->shortcutArea->setText(settings.value("area","Ctrl+Shift+3").toString());
+    ui->shortcutCurrentWindow->setText(settings.value("window", "Ctrl+Shift+2").toString());
+    ui->shortcutUploadFile->setText(settings.value("upload", "Ctrl+Shift+4").toString());
+    settings.endGroup();
+
+    settings.beginGroup("global");
+    ui->playNotifcationSound->setChecked(settings.value("playsound", false).toBool());
+    settings.endGroup();
 }

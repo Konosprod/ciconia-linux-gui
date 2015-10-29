@@ -14,6 +14,11 @@ signals:
 
 public slots:
     void takeFullscreen();
+    void takeArea();
+    void takeWindow();
+
+protected:
+    QProcess* m_process;
 
 };
 
