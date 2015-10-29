@@ -8,6 +8,7 @@
 #include <QKeySequence>
 #include <QSystemTrayIcon>
 #include <QSettings>
+#include <QFileDialog>
 #include "shortcutreader.h"
 #include "screenshotmanager.h"
 #include "globalshortcut.h"
@@ -27,6 +28,7 @@ public:
 private slots:
     void saveSettings();
     void loadSettings();
+    void browsePath();
 
 protected:
     GlobalShortcut* m_shortcuts[5];

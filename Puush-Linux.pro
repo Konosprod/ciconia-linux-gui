@@ -19,12 +19,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     shortcutreader.cpp \
     screenshotmanager.cpp \
-    globalshortcut.cpp
+    globalshortcut.cpp \
+    uploadmanager.cpp
 
 HEADERS  += mainwindow.h \
     shortcutreader.h \
     screenshotmanager.h \
-    globalshortcut.h
+    globalshortcut.h \
+    uploadmanager.h
 
 FORMS    += mainwindow.ui
 

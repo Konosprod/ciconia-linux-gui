@@ -43,6 +43,8 @@ void MainWindow::doConnexions()
     connect(ui->shortcutArea, SIGNAL(textChanged(QString)), m_shortcuts[1], SLOT(updateShortcut(QString)));
     connect(ui->shortcutCurrentWindow, SIGNAL(textChanged(QString)), m_shortcuts[2], SLOT(updateShortcut(QString)));
 
+    connect(ui->browseButton, SIGNAL(clicked()), this, SLOT(browsePath()));
+
     connect(ui->buttonQuit, SIGNAL(clicked()), qApp, SLOT(quit()));
 
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(saveSettings()));
@@ -62,13 +64,20 @@ void MainWindow::saveSettings()
     settings.beginGroup("global");
     settings.setValue("playsound", ui->playNotifcationSound->isChecked());
     settings.setValue("clipboard", ui->copyToClipboard->isChecked());
+    settings.setValue("browser", ui->openInBrowser->isChecked());
+    settings.setValue("save", ui->saveLocalCopy->isChecked());
+    settings.setValue("path", ui->pathLineEdit->text());
+    settings.endGroup();
+
+    settings.beginGroup("account");
+    settings.setValue("url", ui->urlLineEdit->text());
+    settings.setValue("api", ui->apiLineEdit->text());
     settings.endGroup();
 }
 
 void MainWindow::loadSettings()
 {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Konosprod", "Ciconia");
-
+    QSettings settings (QSettings::IniFormat, QSettings::UserScope, "Konosprod", "Ciconia");
     settings.beginGroup("shortcuts");
     ui->shortcutFullscreen->setText(settings.value("fullscreen", "Ctrl+Shift+1").toString());
     ui->shortcutArea->setText(settings.value("area","Ctrl+Shift+3").toString());
@@ -77,6 +86,20 @@ void MainWindow::loadSettings()
     settings.endGroup();
 
     settings.beginGroup("global");
-    ui->playNotifcationSound->setChecked(settings.value("playsound", false).toBool());
+    ui->playNotifcationSound->setChecked(settings.value("playsound").toBool());
+    ui->copyToClipboard->setChecked(settings.value("clipboard").toBool());
+    ui->openInBrowser->setChecked(settings.value("browser").toBool());
+    ui->saveLocalCopy->setChecked(settings.value("save").toBool());
+    ui->pathLineEdit->setText(settings.value("path").toString());
     settings.endGroup();
+
+    settings.beginGroup("account");
+    ui->urlLineEdit->setText(settings.value("url").toString());
+    ui->apiLineEdit->setText(settings.value("api").toString());
+    settings.endGroup();
+}
+
+void MainWindow::browsePath()
+{
+    ui->pathLineEdit->setText(QFileDialog::getExistingDirectory(this, "Save location")+"/");
 }
