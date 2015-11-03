@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui phonon
 
 CONFIG += mobility qxt
 QXT     += core gui network
@@ -19,14 +19,12 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     shortcutreader.cpp \
     screenshotmanager.cpp \
-    globalshortcut.cpp \
-    uploadmanager.cpp
+    globalshortcut.cpp
 
 HEADERS  += mainwindow.h \
     shortcutreader.h \
     screenshotmanager.h \
-    globalshortcut.h \
-    uploadmanager.h
+    globalshortcut.h
 
 FORMS    += mainwindow.ui
 

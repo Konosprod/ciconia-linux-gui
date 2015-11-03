@@ -7,8 +7,18 @@
 #include <QKeyEvent>
 #include <QKeySequence>
 #include <QSystemTrayIcon>
-#include <QSettings>
 #include <QFileDialog>
+#include <QNetworkAccessManager>
+#include <QHttpMultiPart>
+#include <QFile>
+#include <QSettings>
+#include <QNetworkReply>
+#include <QClipboard>
+#include <QApplication>
+#include <QDesktopServices>
+#include <QUrl>
+#include <phonon>
+#include <QSound>
 #include "shortcutreader.h"
 #include "screenshotmanager.h"
 #include "globalshortcut.h"
@@ -29,11 +39,22 @@ private slots:
     void saveSettings();
     void loadSettings();
     void browsePath();
+    void systrayAction(QSystemTrayIcon::ActivationReason r);
+    void uploadFile(QString filename, QString path="");
+    void uploadFinished(QNetworkReply* r);
+    void uploadProgress(qint64 a, qint64 b);
+    void selectAndUpload();
+    void openInBrowser();
 
 protected:
     GlobalShortcut* m_shortcuts[5];
     ScreenshotManager* m_screenmanager;
     QSystemTrayIcon* m_systray;
+    QNetworkAccessManager* m_manager;
+    QString m_lastFilename;
+    QString m_url;
+
+    void closeEvent(QCloseEvent *event);
 
 private:
     Ui::MainWindow *ui;

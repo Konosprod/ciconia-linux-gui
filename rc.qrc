@@ -1,1 +1,6 @@
-<RCC/>
+<RCC>
+    <qresource prefix="/rc">
+        <file alias="notification">rc/notification.wav</file>
+        <file alias="icon">rc/icon.png</file>
+    </qresource>
+</RCC>

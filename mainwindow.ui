@@ -73,6 +73,13 @@
              </property>
             </widget>
            </item>
+           <item row="2" column="1">
+            <widget class="QCheckBox" name="startHidden">
+             <property name="text">
+              <string>Start hidden</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
@@ -279,7 +286,7 @@
      <x>0</x>
      <y>0</y>
      <width>427</width>
-     <height>24</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>

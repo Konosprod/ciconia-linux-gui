@@ -22,9 +22,6 @@ public slots:
     void takeArea();
     void takeWindow();
 
-private slots:
-    void uploadFile(QString &filename);
-
 protected:
     QProcess* m_process;
     QString m_path;

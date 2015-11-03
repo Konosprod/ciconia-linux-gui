@@ -58,8 +58,3 @@ void ScreenshotManager::takeWindow()
 
     emit screenshotDone(filename);
 }
-
-void ScreenshotManager::uploadFile(QString &filename)
-{
-
-}
