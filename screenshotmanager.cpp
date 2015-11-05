@@ -52,8 +52,6 @@ void ScreenshotManager::takeWindow()
     args << "-f";
     args << m_path + filename;
 
-    qDebug() << args;
-
     m_process->execute("gnome-screenshot", args);
 
     emit screenshotDone(filename);
