@@ -19,6 +19,7 @@
 #include <QUrl>
 #include <phonon>
 #include <QSound>
+#include <QMenu>
 #include "shortcutreader.h"
 #include "screenshotmanager.h"
 #include "globalshortcut.h"
@@ -53,6 +54,9 @@ protected:
     QNetworkAccessManager* m_manager;
     QString m_lastFilename;
     QString m_url;
+    QMenu* m_systrayMenu;
+
+    void setupSystrayMenu();
 
     void closeEvent(QCloseEvent *event);
 

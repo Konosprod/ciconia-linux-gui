@@ -16,12 +16,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     m_systray->setIcon(QIcon(":/rc/icon"));
+
+    setupSystrayMenu();
+
     m_systray->show();
 
     loadSettings();
 
-    if(ui->startHidden->isChecked())
-        this->hide();
+    if(!ui->startHidden->isChecked())
+        this->show();
 
     m_shortcuts[0] = new GlobalShortcut(QKeySequence(ui->shortcutFullscreen->text()), this);
     m_shortcuts[1] = new GlobalShortcut(QKeySequence(ui->shortcutArea->text()), this);
@@ -252,10 +255,6 @@ void MainWindow::systrayAction(QSystemTrayIcon::ActivationReason r)
         }
         break;
 
-    case QSystemTrayIcon::Context:
-        this->show();
-        break;
-
     default:
         break;
     }
@@ -283,4 +282,33 @@ void MainWindow::closeEvent(QCloseEvent *event)
         this->hide();
         event->ignore();
     }
+}
+
+void MainWindow::setupSystrayMenu()
+{
+    m_systrayMenu = new QMenu(this);
+    QAction* show = m_systrayMenu->addAction("Show");
+
+    m_systrayMenu->addSeparator();
+
+    QAction* fullscreen = m_systrayMenu->addAction("Capture fullscreen");
+    QAction* area = m_systrayMenu->addAction("Capture area");
+    QAction* window = m_systrayMenu->addAction("Capture window");
+    QAction* upload = m_systrayMenu->addAction("Upload file");
+
+    m_systrayMenu->addSeparator();
+
+    QAction* quit = m_systrayMenu->addAction("Quit");
+
+    show->setIconVisibleInMenu(false);
+    quit->setIconVisibleInMenu(false);
+
+    m_systray->setContextMenu(m_systrayMenu);
+
+    connect(show, SIGNAL(triggered()), this, SLOT(show()));
+    connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
+    connect(fullscreen, SIGNAL(triggered()), m_screenmanager, SLOT(takeFullscreen()));
+    connect(area, SIGNAL(triggered()), m_screenmanager, SLOT(takeArea()));
+    connect(window, SIGNAL(triggered()), m_screenmanager, SLOT(takeWindow()));
+    connect(upload, SIGNAL(triggered()), this, SLOT(selectAndUpload()));
 }
