@@ -1,6 +1,6 @@
 #include "screenshotmanager.h"
 
-ScreenshotManager::ScreenshotManager(QWidget *parent) :
+ScreenshotManager::ScreenshotManager(QWidget *parent, QString path) :
     QWidget(parent)
 {
     m_process = new QProcess(this);

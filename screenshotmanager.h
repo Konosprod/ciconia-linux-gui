@@ -12,7 +12,7 @@ class ScreenshotManager : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ScreenshotManager(QWidget *parent = 0);
+    explicit ScreenshotManager(QWidget *parent = 0, QString path = "");
 
 signals:
     void screenshotDone(const QString &filename);

@@ -10,7 +10,15 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle("Ciconia");
     setWindowIcon(QIcon(":/rc/icon"));
 
-    m_screenmanager = new ScreenshotManager(this);
+    loadSettings();
+
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Konosprod", "Ciconia");
+
+    settings.beginGroup("global");
+    QString path = settings.value("path").toString();
+    settings.endGroup();
+
+    m_screenmanager = new ScreenshotManager(this, path);
     m_systray = new QSystemTrayIcon(this);
     m_manager = new QNetworkAccessManager(this);
 
@@ -21,7 +29,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_systray->show();
 
-    loadSettings();
 
     if(!ui->startHidden->isChecked())
         this->show();
@@ -140,18 +147,12 @@ void MainWindow::browsePath()
 
 void MainWindow::uploadFile(QString filename, QString path)
 {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Konosprod", "Ciconia");
-
-    settings.beginGroup("account");
-    QString upUrl = settings.value("url", "").toString();
-    QString apiKey = settings.value("api", "").toString();
-    settings.endGroup();
-
-    settings.beginGroup("global");
+    QString upUrl = ui->urlLineEdit->text();
+    QString apiKey = ui->apiLineEdit->text();
 
     QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType, this);
 
-    m_lastFilename = settings.value("path", "").toString() + filename;
+    m_lastFilename = ui->pathLineEdit->text() + filename;
 
     QHttpPart textPart;
     textPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"k\""));
@@ -186,45 +187,37 @@ void MainWindow::uploadFile(QString filename, QString path)
     QNetworkReply* reply = m_manager->post(request, multiPart);
 
     connect(reply, SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(uploadProgress(qint64, qint64)));
-
-    settings.endGroup();
 }
 
 void MainWindow::uploadFinished(QNetworkReply* r)
 {
     m_url = r->readAll();
 
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Konosprod", "Ciconia");
-
-    settings.beginGroup("global");
-
-    if(settings.value("clipboard").toBool())
+    if(ui->copyToClipboard->isChecked())
     {
         QClipboard* cb = QApplication::clipboard();
 
         cb->setText(m_url);
     }
 
-    if(settings.value("playsound").toBool())
+    if(ui->playNotifcationSound->isChecked())
     {
         Phonon::MediaObject * sound = Phonon::createPlayer(Phonon::MusicCategory, Phonon::MediaSource(":/rc/notification"));
         sound->play();
     }
 
-    if(settings.value("browser").toBool())
+    if(ui->openInBrowser->isChecked())
     {
         QDesktopServices::openUrl(QUrl(m_url));
     }
 
-    if(!settings.value("save").toBool())
+    if(!ui->saveLocalCopy->isChecked())
     {
         QFile::remove(m_lastFilename);
     }
 
     m_systray->showMessage("Upload done", m_url, QSystemTrayIcon::Information, 2000);
     m_systray->setToolTip("");
-
-    settings.endGroup();
 }
 
 void MainWindow::uploadProgress(qint64 a, qint64 b)
