@@ -142,7 +142,7 @@ void MainWindow::loadSettings()
 
 void MainWindow::browsePath()
 {
-    ui->pathLineEdit->setText(QFileDialog::getExistingDirectory(this, "Save location")+"/");
+    ui->pathLineEdit->setText(QFileDialog::getExistingDirectory(this, "Save location", QDir::homePath())+"/");
 }
 
 void MainWindow::uploadFile(QString filename, QString path)
@@ -255,7 +255,7 @@ void MainWindow::systrayAction(QSystemTrayIcon::ActivationReason r)
 
 void MainWindow::selectAndUpload()
 {
-    QString file = QFileDialog::getOpenFileName(this, "Upload");
+    QString file = QFileDialog::getOpenFileName(this, "Upload", QDir::homePath());
     QString filename = file.mid(file.lastIndexOf("/"));
     QString path = file.mid(0, file.lastIndexOf("/"));
 
