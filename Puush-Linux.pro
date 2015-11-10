@@ -6,7 +6,7 @@
 
 QT       += core gui phonon
 
-CONFIG += mobility qxt
+CONFIG += qxt
 QXT     += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
