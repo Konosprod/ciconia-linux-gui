@@ -19,6 +19,8 @@
 #include <QUrl>
 #include <phonon>
 #include <QSound>
+#include <QSslSocket>
+#include <QSslConfiguration>
 #include <QMenu>
 #include "shortcutreader.h"
 #include "screenshotmanager.h"

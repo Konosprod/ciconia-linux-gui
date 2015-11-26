@@ -181,8 +181,13 @@ void MainWindow::uploadFile(QString filename, QString path)
     multiPart->append(textPart);
     multiPart->append(imagePart);
 
+
     QUrl url(upUrl);
     QNetworkRequest request(url);
+    QSslConfiguration conf = request.sslConfiguration();
+    conf.setPeerVerifyMode(QSslSocket::VerifyNone);
+
+    request.setSslConfiguration(conf);
 
     QNetworkReply* reply = m_manager->post(request, multiPart);
 
