@@ -65,6 +65,11 @@ protected:
 private:
     Ui::MainWindow *ui;
 
+    int FULLSCREEN = 0;
+    int AREA = 1;
+    int WINDOW = 2;
+    int FILE = 3;
+
     void doConnexions();
 };
 

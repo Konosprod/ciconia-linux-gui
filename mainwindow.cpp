@@ -23,20 +23,20 @@ MainWindow::MainWindow(QWidget *parent) :
     m_manager = new QNetworkAccessManager(this);
 
 
-    m_systray->setIcon(QIcon(":/rc/icon"));
-
-    setupSystrayMenu();
-
-    m_systray->show();
-
-
     if(!ui->startHidden->isChecked())
         this->show();
 
-    m_shortcuts[0] = new GlobalShortcut(QKeySequence(ui->shortcutFullscreen->text()), this);
-    m_shortcuts[1] = new GlobalShortcut(QKeySequence(ui->shortcutArea->text()), this);
-    m_shortcuts[2] = new GlobalShortcut(QKeySequence(ui->shortcutCurrentWindow->text()), this);
-    m_shortcuts[3] = new GlobalShortcut(QKeySequence(ui->shortcutUploadFile->text()), this);
+    m_shortcuts[this->FULLSCREEN] = new GlobalShortcut(QKeySequence(ui->shortcutFullscreen->text()), this);
+    m_shortcuts[this->AREA] = new GlobalShortcut(QKeySequence(ui->shortcutArea->text()), this);
+    m_shortcuts[this->WINDOW] = new GlobalShortcut(QKeySequence(ui->shortcutCurrentWindow->text()), this);
+    m_shortcuts[this->FILE] = new GlobalShortcut(QKeySequence(ui->shortcutUploadFile->text()), this);
+
+
+    m_systray->setIcon(QIcon(":/rc/icon"));
+
+    m_systray->show();
+
+    setupSystrayMenu();
 
     doConnexions();
 }
@@ -53,15 +53,15 @@ void MainWindow::doConnexions()
     connect(ui->currentWindowButton, SIGNAL(clicked()), ui->shortcutCurrentWindow, SLOT(readEntry()));
     connect(ui->uploadFileButton, SIGNAL(clicked()), ui->shortcutUploadFile, SLOT(readEntry()));
 
-    connect(m_shortcuts[0], SIGNAL(activated()), m_screenmanager, SLOT(takeFullscreen()));
-    connect(m_shortcuts[1], SIGNAL(activated()), m_screenmanager, SLOT(takeArea()));
-    connect(m_shortcuts[2], SIGNAL(activated()), m_screenmanager, SLOT(takeWindow()));
-    connect(m_shortcuts[3], SIGNAL(activated()), this, SLOT(selectAndUpload()));
+    connect(m_shortcuts[this->FULLSCREEN], SIGNAL(activated()), m_screenmanager, SLOT(takeFullscreen()));
+    connect(m_shortcuts[this->AREA], SIGNAL(activated()), m_screenmanager, SLOT(takeArea()));
+    connect(m_shortcuts[this->WINDOW], SIGNAL(activated()), m_screenmanager, SLOT(takeWindow()));
+    connect(m_shortcuts[this->FILE], SIGNAL(activated()), this, SLOT(selectAndUpload()));
 
-    connect(ui->shortcutFullscreen, SIGNAL(textChanged(QString)), m_shortcuts[0], SLOT(updateShortcut(QString)));
-    connect(ui->shortcutArea, SIGNAL(textChanged(QString)), m_shortcuts[1], SLOT(updateShortcut(QString)));
-    connect(ui->shortcutCurrentWindow, SIGNAL(textChanged(QString)), m_shortcuts[2], SLOT(updateShortcut(QString)));
-    connect(ui->shortcutUploadFile, SIGNAL(textChanged(QString)), m_shortcuts[3], SLOT(updateShortcut(QString)));
+    connect(ui->shortcutFullscreen, SIGNAL(textChanged(QString)), m_shortcuts[this->FULLSCREEN], SLOT(updateShortcut(QString)));
+    connect(ui->shortcutArea, SIGNAL(textChanged(QString)), m_shortcuts[this->AREA], SLOT(updateShortcut(QString)));
+    connect(ui->shortcutCurrentWindow, SIGNAL(textChanged(QString)), m_shortcuts[this->WINDOW], SLOT(updateShortcut(QString)));
+    connect(ui->shortcutUploadFile, SIGNAL(textChanged(QString)), m_shortcuts[this->FILE], SLOT(updateShortcut(QString)));
 
     connect(ui->browseButton, SIGNAL(clicked()), this, SLOT(browsePath()));
 
@@ -289,10 +289,10 @@ void MainWindow::setupSystrayMenu()
 
     m_systrayMenu->addSeparator();
 
-    QAction* fullscreen = m_systrayMenu->addAction("Capture fullscreen");
-    QAction* area = m_systrayMenu->addAction("Capture area");
-    QAction* window = m_systrayMenu->addAction("Capture window");
-    QAction* upload = m_systrayMenu->addAction("Upload file");
+    QAction* fullscreen = m_systrayMenu->addAction("Fullscreen\t"+m_shortcuts[this->FULLSCREEN]->shortcut().toString());
+    QAction* area = m_systrayMenu->addAction("Area\t"+m_shortcuts[this->AREA]->shortcut().toString());
+    QAction* window = m_systrayMenu->addAction("Window\t"+m_shortcuts[this->WINDOW]->shortcut().toString());
+    QAction* upload = m_systrayMenu->addAction("File\t"+m_shortcuts[this->FILE]->shortcut().toString());
 
     m_systrayMenu->addSeparator();
 
